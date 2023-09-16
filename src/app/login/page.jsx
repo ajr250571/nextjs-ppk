@@ -7,7 +7,7 @@ import toast from "react-hot-toast";
 import { useGlobal } from "../context/GlobalContext";
 
 function Home() {
-  const { getProfile } = useGlobal()
+  const { getProfile } = useGlobal();
   const [credentials, setCredentials] = useState({
     email: "",
     password: "",
@@ -17,18 +17,18 @@ function Home() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const res = await axios.post("/api/auth/login", credentials);
-    console.log("login", `isLogged ${res.data.isLogged}`)
+    console.log("login", `isLogged ${res.data.isLogged}`);
     if (res.data.isLogged) {
-      getProfile()
+      getProfile();
       router.push("/");
       router.refresh();
     } else {
-      toast.error("Usuario y/o contraseña invalida. reintente...")
+      toast.error("Usuario y/o contraseña invalida. reintente...");
     }
   };
 
   return (
-    <div className="flex justify-center items-center bg-base-200 py-4 rounded-ee-full" >
+    <div className="flex  justify-center items-center py-4 bg-base-200 rounded-ee-full">
       <form onSubmit={handleSubmit}>
         <h1 className="text-2xl text-primary">Bienvenido</h1>
         <input
