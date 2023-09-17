@@ -5,11 +5,12 @@ function ViewImage({ imagen }) {
   return (
     <div className="my-2">
       <Image
-        alt={imagen}
+        alt="Imagen"
         src={`/${imagen}`}
         width="500"
         height="500"
         className="w-full"
+        refresh={true}
       />
     </div>
   );
