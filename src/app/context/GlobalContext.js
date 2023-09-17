@@ -15,7 +15,6 @@ export const useGlobal = () => {
 export const GlobalProvider = ({ children }) => {
   const router = useRouter();
 
-
   const [user, setUser] = useState({
     email: "",
     username: "",
@@ -23,9 +22,9 @@ export const GlobalProvider = ({ children }) => {
 
   const isLogged = () => {
     if (!user.email) {
-      router.push('/login')
+      router.push("/login");
     }
-  }
+  };
 
   const getProfile = async () => {
     const profile = await axios.get("/api/profile");
@@ -38,15 +37,13 @@ export const GlobalProvider = ({ children }) => {
       setUser({
         email: "",
         username: "",
-      })
-      console.log("logout", "email")
-
+      });
+      console.log("logout", "email");
     } catch (error) {
       console.error(error.message);
     }
     router.push("/login");
   };
-
 
   return (
     <GlobalContext.Provider

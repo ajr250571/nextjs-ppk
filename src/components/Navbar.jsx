@@ -14,14 +14,16 @@ function Navbar() {
   useEffect(() => {
     console.log("Navbar", `email ${user.email}`);
     getProfile();
-    if (!user.email) {
-      router.push("/login");
-      router.refresh();
+    isLogged();
+  }, [user.email]);
+
+  const Redirect = (ruta) => {
+    if (user.email) {
+      router.push(ruta);
     } else {
-      router.push("/");
-      router.refresh();
+      router.push("/login");
     }
-  }, [router]);
+  };
 
   const handleLogout = () => {
     logout();
@@ -79,11 +81,14 @@ function Navbar() {
                   <summary>Rend.</summary>
                   <ul className="p-2 bg-base-100">
                     <li>
-                      <Link href="/rend/ranking">Ranking</Link>
+                      <button onClick={() => Redirect("/rend/ranking")}>
+                        Ranking
+                      </button>
+                      <button onClick={() => Redirect("/rend/diario")}>
+                        Diario
+                      </button>
                     </li>
-                    <li>
-                      <Link href="/rend/diario">Diario</Link>
-                    </li>
+                    <li></li>
                   </ul>
                 </details>
               </li>
