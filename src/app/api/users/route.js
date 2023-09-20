@@ -2,6 +2,7 @@ import { prisma } from "@/libs/prisma";
 import { NextResponse } from "next/server";
 import jwt from "jsonwebtoken";
 import { cookies } from "next/headers";
+import bcrypt from "bcrypt";
 
 export async function GET(request) {
   if (process.env.NODE_ENV === "production") {
@@ -29,6 +30,11 @@ export async function GET(request) {
       email: true,
       name: true,
       role: true,
+      attempts: true,
+      blocked: true,
+      createdAt: true,
+      UpdateAt: true,
+
     },
   });
   return NextResponse.json(users);
@@ -55,6 +61,10 @@ export async function POST(request) {
   }
 
   const data = await request.json();
+
+  const salt = bcrypt.genSaltSync();
+  const hashed = bcrypt.hashSync(data.password, salt);
+  data.password = hashed
   const user = await prisma.user.create({
     data: data,
   });

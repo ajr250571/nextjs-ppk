@@ -3,11 +3,28 @@ import { NextResponse } from "next/server";
 import bcrypt from "bcrypt";
 
 export async function POST(request) {
+  // Parameters: email, old_password, new_password
   const data = await request.json();
+
+  if (process.env.NODE_ENV === "production") {
+    try {
+      const cookieStore = cookies();
+      const token = cookieStore.get("TokenName");
+      if (!token) {
+        return NextResponse.json({ message: "Token not found" }, { status: 404 });
+      }
+      const { email } = jwt.verify(token.value, process.env.SECRET_KEY);
+      if (!email) {
+        return NextResponse.json({ message: "Token invalid" }, { status: 401 });
+      }
+    } catch (error) {
+      return NextResponse.json({ error });
+    }
+  }
 
   if (data.old_password === data.new_password) {
     return NextResponse.json(
-      { message: "La clave Nueva debe ser diatinta a la Vieja." },
+      { message: "La clave Nueva debe ser distinta a la Anterior." },
       { status: 429 }
     );
   }
@@ -29,9 +46,6 @@ export async function POST(request) {
     });
     return NextResponse.json(userUpdated);
   } else {
-    return NextResponse.json(
-      { message: "Usuario y/o clave incorrecto." },
-      { status: 429 }
-    );
+    return NextResponse.json({ message: "Contraseña incorrecta" }, { status: 422 })
   }
 }
