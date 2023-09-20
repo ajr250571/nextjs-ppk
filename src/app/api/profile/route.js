@@ -10,14 +10,16 @@ export function GET(request) {
     // return res.status(401).json({ error: "Not logged in" });
     return NextResponse.json({
       email: "",
-      username: ""
+      username: "",
+      role: "",
     })
   }
 
-  const { email, username } = jwt.verify(token.value, process.env.SECRET_KEY);
+  const { email, username, role } = jwt.verify(token.value, process.env.SECRET_KEY);
 
   return NextResponse.json({
     email,
     username,
+    role,
   });
 }

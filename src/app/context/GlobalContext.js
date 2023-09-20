@@ -38,7 +38,6 @@ export const GlobalProvider = ({ children }) => {
         email: "",
         username: "",
       });
-      console.log("logout", "email");
     } catch (error) {
       console.error(error.message);
     }

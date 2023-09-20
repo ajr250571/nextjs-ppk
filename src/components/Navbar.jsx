@@ -3,8 +3,8 @@ import { useGlobal } from "@/app/context/GlobalContext";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-
 import { useEffect } from "react";
+import toast from "react-hot-toast";
 
 function Navbar() {
   const { user, isLogged, getProfile, logout } = useGlobal();
@@ -12,24 +12,30 @@ function Navbar() {
   const router = useRouter();
 
   useEffect(() => {
-    console.log("Navbar", `email ${user.email}`);
+    // console.log("Navbar", `email ${user.email}`);
     getProfile();
-    isLogged();
+    if (!user.email) {
+      router.push("/login");
+    }
   }, [user.email]);
 
   const Redirect = (ruta) => {
     if (user.email) {
       router.push(ruta);
     } else {
+      toast.error("No esta conectado, ingrese al sistema ...", { position: "bottom-right" })
       router.push("/login");
     }
   };
 
   const handleLogout = () => {
-    logout();
-    console.log("logout", `email ${user.email}`);
+    if (user.email) {
+      logout();
+      // console.log("logout", `email ${user.email}`);
+    }
     router.push("/login");
-    router.refresh();
+    // router.refresh();
+
   };
   return (
     <div>
@@ -121,7 +127,13 @@ function Navbar() {
                 className="btn btn-neutral btn-sm btn-outline"
                 onClick={handleLogout}
               >
-                Desconectarse
+                {
+                  user.email ?
+                    'Desconectarse'
+                    :
+                    'Conectarse'
+                }
+
               </button>
             </ul>
           </div>
