@@ -23,7 +23,14 @@ export async function GET(request) {
     }
   }
 
-  const users = await prisma.user.findMany();
+  const users = await prisma.user.findMany({
+    select: {
+      id: true,
+      email: true,
+      name: true,
+      role: true,
+    },
+  });
   return NextResponse.json(users);
 }
 
